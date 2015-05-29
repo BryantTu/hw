@@ -26,8 +26,8 @@ import com.lovo.util.CommonUtil;
 import com.lovo.util.ReflectionUtil;
 
 /**
- * Ç°¶Ë¿ØÖÆÆ÷(ÃÅÃæÄ£Ê½[Ìá¹©ÓÃ»§ÇëÇóµÄÃÅÃæ])
- * @author Âæê»
+ * å‰ç«¯æ§åˆ¶å™¨(é—¨é¢æ¨¡å¼[æä¾›ç”¨æˆ·è¯·æ±‚çš„é—¨é¢])
+ * @author éª†æ˜Š
  *
  */
 @WebServlet(urlPatterns = { "*.do" }, loadOnStartup = 0, 
@@ -45,9 +45,9 @@ public class FrontController extends HttpServlet {
 	private static final String DEFAULT_JSP_PATH = "/WEB-INF/content/";
 	private static final String DEFAULT_ACTION_NAME = "Action";
 	
-	private String packagePrefix = null;		// °üÃûµÄÇ°×º
-	private String jspPrefix = null;			// JSPÒ³ÃæÂ·¾¶µÄÇ°×º
-	private String actionSuffix = null;			// ActionÀàÃûµÄºó×º
+	private String packagePrefix = null;		// åŒ…åçš„å‰ç¼€
+	private String jspPrefix = null;			// JSPé¡µé¢è·¯å¾„çš„å‰ç¼€
+	private String actionSuffix = null;			// Actionç±»åçš„åç¼€
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -71,7 +71,7 @@ public class FrontController extends HttpServlet {
 				injectProperties(action, req);
 			} catch (Exception e) {
 			}
-			if(action instanceof Uploadable) {	// Í¨¹ı½Ó¿ÚÏòÊµÏÖÁË½Ó¿ÚµÄÀà×¢ÈëÊôĞÔ(½Ó¿Ú×¢Èë)
+			if(action instanceof Uploadable) {	// é€šè¿‡æ¥å£å‘å®ç°äº†æ¥å£çš„ç±»æ³¨å…¥å±æ€§(æ¥å£æ³¨å…¥)
 				List<Part> fileparts = new ArrayList<>();
 				List<String> filenames = new ArrayList<>();
 				for(Part part : req.getParts()) {
@@ -116,31 +116,31 @@ public class FrontController extends HttpServlet {
 		}
 	}
 	
-	// ¸ù¾İÇëÇóµÄĞ¡·şÎñÂ·¾¶»ñµÃ¶ÔÓ¦µÄActionÀàµÄÃû×Ö
+	// æ ¹æ®è¯·æ±‚çš„å°æœåŠ¡è·¯å¾„è·å¾—å¯¹åº”çš„Actionç±»çš„åå­—
 	private String getFullActionName(String servletPath) {
 		int start = servletPath.lastIndexOf("/") + 1;
 		int end = servletPath.lastIndexOf(".do");
 		return packagePrefix + getSubPackage(servletPath) + CommonUtil.capitalize(servletPath.substring(start, end)) + actionSuffix;
 	}
 	
-	// ¸ù¾İÇëÇóµÄĞ¡·şÎñÂ·¾¶»ñµÃ¶ÔÓ¦µÄÍêÕûµÄJSPÒ³ÃæÂ·¾¶
+	// æ ¹æ®è¯·æ±‚çš„å°æœåŠ¡è·¯å¾„è·å¾—å¯¹åº”çš„å®Œæ•´çš„JSPé¡µé¢è·¯å¾„
 	private String getFullJspPath(String servletPath) {
 		return jspPrefix + getSubJspPath(servletPath);
 	}
 	
-	// ¸ù¾İÇëÇóµÄĞ¡·şÎñÂ·¾¶»ñµÃ×Ó¼¶°üÃû
+	// æ ¹æ®è¯·æ±‚çš„å°æœåŠ¡è·¯å¾„è·å¾—å­çº§åŒ…å
 	private String getSubPackage(String servletPath) {
 		return getSubJspPath(servletPath).replaceAll("\\/", ".");
 	}
 	
-	// ¸ù¾İÇëÇóµÄĞ¡·şÎñÂ·¾¶»ñµÃJSPÒ³ÃæµÄ×Ó¼¶Â·¾¶
+	// æ ¹æ®è¯·æ±‚çš„å°æœåŠ¡è·¯å¾„è·å¾—JSPé¡µé¢çš„å­çº§è·¯å¾„
 	private String getSubJspPath(String servletPath) {
 		int start = 1;
 		int end = servletPath.lastIndexOf("/");
 		return end > start ? servletPath.substring(start, end > 0 ? end + 1 : 0) : "";
 	}
 
-	// ÏòAction¶ÔÏóÖĞ×¢ÈëÊôĞÔ
+	// å‘Actionå¯¹è±¡ä¸­æ³¨å…¥å±æ€§
 	private void injectProperties(Action action, HttpServletRequest req) throws Exception {
 		Enumeration<String> paramNamesEnum =  req.getParameterNames();
 		while(paramNamesEnum.hasMoreElements()) {
@@ -148,16 +148,16 @@ public class FrontController extends HttpServlet {
 			Class<?> fieldType = ReflectionUtil.getFieldType(action, paramName.replaceAll("\\[|\\]", ""));
 			if(fieldType != null) {
 				Object paramValue = null;
-				if(fieldType.isArray()) {	// Èç¹ûÊôĞÔÊÇÊı×éÀàĞÍ
-					Class<?> elemType = fieldType.getComponentType();	// »ñµÃÊı×éÔªËØÀàĞÍ
+				if(fieldType.isArray()) {	// å¦‚æœå±æ€§æ˜¯æ•°ç»„ç±»å‹
+					Class<?> elemType = fieldType.getComponentType();	// è·å¾—æ•°ç»„å…ƒç´ ç±»å‹
 					String[] values = req.getParameterValues(paramName);
-					paramValue = Array.newInstance(elemType, values.length);	// Í¨¹ı·´Éä´´½¨Êı×é¶ÔÏó
+					paramValue = Array.newInstance(elemType, values.length);	// é€šè¿‡åå°„åˆ›å»ºæ•°ç»„å¯¹è±¡
 					for(int i = 0; i < values.length; i++) {
 						Object tempObj = CommonUtil.changeStringToObject(elemType, values[i]);
 						Array.set(paramValue, i, tempObj);
 					}
 				}
-				else {	// ·ÇÊı×éÀàĞÍµÄÊôĞÔ
+				else {	// éæ•°ç»„ç±»å‹çš„å±æ€§
 					paramValue = CommonUtil.changeStringToObject(fieldType, req.getParameter(paramName));
 				}
 				ReflectionUtil.setValue(action, paramName.replaceAll("\\[|\\]", ""), paramValue);

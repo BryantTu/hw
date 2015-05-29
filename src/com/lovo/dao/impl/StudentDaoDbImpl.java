@@ -14,10 +14,10 @@ import com.lovo.util.DbSessionFactory;
 public class StudentDaoDbImpl 
 		extends BaseDaoDbAdapter<Student, Integer>
 		implements StudentDao {
-	private static final String[] fieldNames = { 
+	private static final String[]  colNames= { 
 			"stuid", "name", "sex", "age", "cid"
 	};
-	private static final String[] colNames = { 
+	private static final String[] fieldNames = { 
 			"id", "name", "gender", "tel", "myClass"
 	};
 
@@ -26,7 +26,7 @@ public class StudentDaoDbImpl
 		try {
 			ResultSet rs = DbSessionFactory.openSession().executeQuery(
 					"SELECT stuid, name, sex, age, cid FROM (SELECT T.*, ROWNUM RN FROM (SELECT * FROM T_STUDENT where cid = ? order by stuid) T WHERE ROWNUM<=?) WHERE RN>?",
-					classId, (page - 1) * size, page * size);
+					classId, page * size, (page - 1) * size);
 			List<Student> list = fetchMultiEntities(rs, fieldNames, colNames);
 			rs = DbSessionFactory.openSession().executeQuery(
 					"select count(stuid) from t_student where cid=?",

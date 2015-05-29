@@ -6,9 +6,11 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lovo.entity.MyClass;
+
 /**
- * ·´Éä¹¤¾ßÀà
- * @author Âæê»
+ * ï¿½ï¿½ï¿½ä¹¤ï¿½ï¿½ï¿½ï¿½
+ * @author ï¿½ï¿½ï¿½
  *
  */
 public class ReflectionUtil {
@@ -18,10 +20,10 @@ public class ReflectionUtil {
 	}
 	
 	/**
-	 * ¸ù¾Ý×Ö¶ÎÃû²éÕÒ×Ö¶ÎµÄÀàÐÍ
-	 * @param target Ä¿±ê¶ÔÏó
-	 * @param fieldName ×Ö¶ÎÃû
-	 * @return ×Ö¶ÎµÄÀàÐÍ
+	 * ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶Îµï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param target Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param fieldName ï¿½Ö¶ï¿½ï¿½ï¿½
+	 * @return ï¿½Ö¶Îµï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public static Class<?> getFieldType(Object target, String fieldName) {
 		Class<?> clazz = target.getClass();
@@ -42,9 +44,9 @@ public class ReflectionUtil {
 	}
 	
 	/**
-	 * »ñÈ¡¶ÔÏóËùÓÐ×Ö¶ÎµÄÃû×Ö
-	 * @param obj Ä¿±ê¶ÔÏó
-	 * @return ×Ö¶ÎÃû×ÖµÄÊý×é
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶Îµï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param obj Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public static String[] getFieldNames(Object obj) {
 		Class<?> clazz = obj.getClass();
@@ -59,11 +61,11 @@ public class ReflectionUtil {
 	}
 
 	/**
-	 * Í¨¹ý·´ÉäÈ¡¶ÔÏóÖ¸¶¨×Ö¶Î(ÊôÐÔ)µÄÖµ
-	 * @param target Ä¿±ê¶ÔÏó
-	 * @param fieldName ×Ö¶ÎµÄÃû×Ö
-	 * @throws Èç¹ûÈ¡²»µ½¶ÔÏóÖ¸¶¨×Ö¶ÎµÄÖµÔòÅ×³öÒì³£
-	 * @return ×Ö¶ÎµÄÖµ
+	 * Í¨ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ö¶ï¿½(ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Öµ
+	 * @param target Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param fieldName ï¿½Ö¶Îµï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @throws ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ö¶Îµï¿½Öµï¿½ï¿½ï¿½×³ï¿½ï¿½ì³£
+	 * @return ï¿½Ö¶Îµï¿½Öµ
 	 */
 	public static Object getValue(Object target, String fieldName) {
 		Class<?> clazz = target.getClass();
@@ -87,9 +89,9 @@ public class ReflectionUtil {
 	}
 	
 	/**
-	 * Í¨¹ý·´Éä¸ø¶ÔÏóµÄÖ¸¶¨×Ö¶Î¸³Öµ
-	 * @param target Ä¿±ê¶ÔÏó
-	 * @param fieldName ×Ö¶ÎµÄÃû³Æ
+	 * Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ö¶Î¸ï¿½Öµ
+	 * @param target Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param fieldName ï¿½Ö¶Îµï¿½ï¿½ï¿½ï¿½
 	 * @param value Öµ
 	 */
 	public static void setValue(Object target, String fieldName, Object value) {
@@ -111,6 +113,24 @@ public class ReflectionUtil {
 			}
 		
 			Field f = clazz.getDeclaredField(fs[fs.length - 1]);
+			if(f.getType().isAssignableFrom(boolean.class))
+			{
+				value = "1".equals(String.valueOf(value)) ? true : false;
+			}
+			else if(f.getType().isAssignableFrom(int.class))
+			{
+				value = Integer.valueOf(String.valueOf(value));
+			}
+			else if(f.getType().isAssignableFrom(String.class))
+			{
+				value = String.valueOf(value);
+			}
+			else if(f.getType().isAssignableFrom(MyClass.class))
+			{
+				MyClass myClass = new MyClass();
+				myClass.setId(Integer.parseInt(String.valueOf(value)));
+				value = myClass;
+			}
 			f.setAccessible(true);
 			f.set(target, value);
 		}

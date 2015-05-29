@@ -86,12 +86,8 @@ public abstract class BaseDaoDbAdapter<E, K> extends BaseDaoAdapter<E, K> {
 				E entity = (E) entityClass.getConstructor().newInstance();
 				String[] fieldNames = ReflectionUtil.getFieldNames(entity);
 				for(int i = 0; i < fieldNames.length && i < rsmd.getColumnCount(); i++) {
-					Object data = rs.getObject(fieldNames[i]);
-					if(data instanceof java.math.BigDecimal)
-					{
-						data = ((java.math.BigDecimal)data).intValue();
-					}
-					ReflectionUtil.setValue(entity, fieldNames[i], data);
+					
+					ReflectionUtil.setValue(entity, fieldNames[i], convertBigInt(rs.getObject(fieldNames[i])));
 				}
 				list.add(entity);
 			} catch (Exception e) {
@@ -116,7 +112,7 @@ public abstract class BaseDaoDbAdapter<E, K> extends BaseDaoAdapter<E, K> {
 			try {
 				E entity = (E) entityClass.getConstructor().newInstance();
 				for(int i = 0; i < colNames.length && i < rsmd.getColumnCount(); i++) {
-					ReflectionUtil.setValue(entity, fieldNames[i], rs.getObject(colNames[i]));
+					ReflectionUtil.setValue(entity, fieldNames[i], convertBigInt(rs.getObject(colNames[i])));
 				}
 				list.add(entity);
 			} catch (Exception e) {
@@ -124,5 +120,15 @@ public abstract class BaseDaoDbAdapter<E, K> extends BaseDaoAdapter<E, K> {
 			}
 		}
 		return list.size() == 0 ? Collections.EMPTY_LIST : list;
+	}
+	
+	private Object convertBigInt(Object data) throws SQLException
+	{
+		Object result = data;
+		if(data instanceof java.math.BigDecimal)
+		{
+			result = ((java.math.BigDecimal)data).intValue();
+		}
+		return result;
 	}
 }
